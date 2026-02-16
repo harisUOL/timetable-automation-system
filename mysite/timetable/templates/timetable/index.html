@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Timetable</title>
+    <link rel="stylesheet" href="{% static 'timetable/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Class 10A Timetable</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th class="day-column">Days</th>
+            <th>I</th>
+            <th>II</th>
+            <th>III</th>
+            <th>IV</th>
+            <th class="recess-column"></th>
+            <th>V</th>
+            <th>VI</th>
+            <th>VII</th>
+            <th>VIII</th>
+            <th>IX</th>
+        </tr>
+        </thead>
+
+        <tbody>
+{% for day in days %}
+<tr>
+    <td class="day-column">{{ day }}</td>
+
+    <!-- Periods I–IV -->
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <!-- Recess -->
+    <td class="recess-column"></td>
+
+    <!-- Periods V–IX -->
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+{% endfor %}
+</tbody>
+
+</div>
+
+</body>
+</html>

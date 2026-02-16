@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    padding: 30px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-radius: 8px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th, td {
+    border: 1px solid #333;
+    text-align: center;
+    padding: 12px 6px;
+    font-size: 14px;
+    height: 60px;
+}
+
+th {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+
+.day-column {
+    font-weight: bold;
+    background-color: #f8f9fa;
+    width: 90px;
+}
+
+.recess-column {
+    background-color: #f2f2f2;
+    position: relative;
+}
+
+.recess-column::after {
+    content: "RECESS";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #888;
+}
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .container {
+        box-shadow: none;
+        border-radius: 0;
+    }
+}
