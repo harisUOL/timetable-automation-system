@@ -1,0 +1,84 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <title>Assign Teacher</title>
+    <link rel="stylesheet" href="{% static 'timetable/style.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>
+        Assign Teacher
+        <br />
+        Class: {{ class_group }}
+        <br />
+        Day: {{ day }} | Period: {{ period }}
+      </h2>
+      {% if error %}
+      <div
+        style="
+          background: #ffdddd;
+          padding: 10px;
+          border: 1px solid red;
+          margin-bottom: 15px;
+        "
+      >
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div style="margin-bottom: 20px">
+          <label><strong>Select Subject:</strong></label
+          ><br />
+          <select name="subject" required>
+            <option value="">-- Select Subject --</option>
+            {% for subject in subjects %}
+            <option value="{{ subject.id }}">{{ subject.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label><strong>Select Teacher:</strong></label>
+          <table border="1" cellpadding="8" style="margin-top: 10px">
+            <tr>
+              <th>Select</th>
+              <th>Name</th>
+              <th>Total Assigned</th>
+              <th>Remaining Availability</th>
+            </tr>
+
+            {% for data in teachers %}
+            <tr>
+              <td>
+                <input
+                  type="radio"
+                  name="teacher"
+                  value="{{ data.teacher.id }}"
+                  required
+                />
+              </td>
+              <td>{{ data.teacher.name }}</td>
+              <td>{{ data.assigned }}</td>
+              <td>
+                {% if data.remaining > 0 %}
+                <span style="color: green">{{ data.remaining }}</span>
+                {% else %}
+                <span style="color: red">0</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+
+        <br />
+        <button type="submit">Assign Teacher</button>
+        <a href="{% url 'class_timetable' class_group.id %}"> Cancel </a>
+      </form>
+    </div>
+  </body>
+</html>

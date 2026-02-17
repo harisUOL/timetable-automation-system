@@ -1,58 +1,98 @@
 {% load static %}
+{% load timetable_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Class Timetable</title>
     <link rel="stylesheet" href="{% static 'timetable/style.css' %}">
-
 </head>
 
 <body>
 
 <div class="container">
-    <h2>Class 10A Timetable</h2>
 
-    <table>
-        <thead>
-        <tr>
-            <th class="day-column">Days</th>
-            <th>I</th>
-            <th>II</th>
-            <th>III</th>
-            <th>IV</th>
-            <th class="recess-column"></th>
-            <th>V</th>
-            <th>VI</th>
-            <th>VII</th>
-            <th>VIII</th>
-            <th>IX</th>
-        </tr>
-        </thead>
+    <h2>Manual Timetable Builder</h2>
 
-        <tbody>
-{% for day in days %}
+    <!-- Class Selector -->
+    <div style="margin-bottom:20px;">
+    <label><strong>Select Class:</strong></label>
+    <select onchange="if (this.value) window.location.href=this.value;">
+        <option value="">-- Select Class --</option>
+        {% for cg in class_groups %}
+            <option value="{% url 'class_timetable' cg.id %}"
+                {% if selected_class and cg.id == selected_class.id %}
+                    selected
+                {% endif %}
+            >
+                {{ cg }}
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+    {% if selected_class %}
+        <h3>{{ selected_class }} Timetable</h3>
+
+        <table>
+            <thead>
+            <tr>
+                <th class="day-column">Days</th>
+                <th>I</th>
+                <th>II</th>
+                <th>III</th>
+                <th>IV</th>
+                <th class="recess-column"></th>
+                <th>V</th>
+                <th>VI</th>
+                <th>VII</th>
+                <th>VIII</th>
+                <th>IX</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for day in days %}
 <tr>
     <td class="day-column">{{ day }}</td>
 
-    <!-- Periods I–IV -->
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    {% for period in periods %}
+        {% if period == 5 %}
+            <td class="recess-column"></td>
+        {% endif %}
 
-    <!-- Recess -->
-    <td class="recess-column"></td>
-
-    <!-- Periods V–IX -->
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+        <td>
+            {% if selected_class %}
+                {% with day_data=timetable|get_item:day %}
+                    {% if day_data %}
+                        {% with entry=day_data|get_item:period %}
+                            {% if entry %}
+                                <strong>{{ entry.subject.name }}</strong><br>
+                                <small>{{ entry.teacher.name }}</small>
+                            {% else %}
+                                <a href="{% url 'assign_teacher' selected_class.id day period %}">
+                                    Assign
+                                </a>
+                            {% endif %}
+                        {% endwith %}
+                    {% else %}
+                        <a href="{% url 'assign_teacher' selected_class.id day period %}">
+                            Assign
+                        </a>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+        </td>
+    {% endfor %}
 </tr>
 {% endfor %}
-</tbody>
+
+            </tbody>
+        </table>
+
+    {% else %}
+        <p>Please select a class to begin building timetable.</p>
+    {% endif %}
 
 </div>
 

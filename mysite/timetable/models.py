@@ -87,3 +87,18 @@ class SubjectRequirement(models.Model):
 
     def __str__(self):
         return f"{self.class_group} - {self.subject}"
+    
+
+
+class TimetableEntry(models.Model):
+    class_group = models.ForeignKey(ClassGroup, on_delete=models.CASCADE)
+    day = models.CharField(max_length=3, choices=DAYS_OF_WEEK)
+    period = models.IntegerField()
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("class_group", "day", "period")
+
+    def __str__(self):
+        return f"{self.class_group} - {self.day} P{self.period}"
